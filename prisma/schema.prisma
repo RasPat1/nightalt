@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  events    Event[]
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  timestamp DateTime
+  type      String   // sleep_start, sleep_end, supplement, etc.
+  category  String   // sleep, intervention
+  name      String
+  value     Float?
+  unit      String?
+  notes     String?
+  createdAt DateTime @default(now())
+}
